@@ -12,7 +12,7 @@ When implementing or reviewing a Playlog interface, use sources in this order:
 4. The supplied logo reference `source/playlog-logo-reference.jpeg`
 5. The original concept board in `source/`
 
-The supplied logo reference defines the mark geometry: the nested `P` and bookmark, the two bookmark points, and the controller buttons arranged as a cross. Do not estimate a color from a screenshot, crop a logo from a raster source, or invent a new logo variation. If the available sources do not cover a use case, record the gap and ask for a brand decision.
+The supplied logo reference defines the mark geometry and appearance. `source/playlog-mark-exact.png` is the background-removed derivative used inside the approved SVG files; it preserves the reference pixels instead of retracing the shape. Do not manually redraw, reinterpret, or generate the mark. If the available sources do not cover a use case, record the gap and ask for a brand decision.
 
 ## Contents
 
@@ -32,6 +32,7 @@ The mobile board is a cross-platform concept reference only. This repository doe
 ## Logo usage
 
 - Use `logos/playlog-mark.svg` for compact placements.
+- Use `logos/favicon.svg` when the complete square reference, including its dark field and original spacing, is required.
 - Use the horizontal light-wordmark lockup on dark surfaces.
 - Use the horizontal dark-wordmark lockup on light surfaces.
 - Preserve clear space equal to at least one controller-dot diameter around the mark.

@@ -9,9 +9,10 @@ When implementing or reviewing a Playlog interface, use sources in this order:
 1. `brand-guidelines.md` and the JSON files in `tokens/`
 2. Approved SVG assets in `logos/`
 3. Topic-specific visual boards in `boards/`
-4. The original concept board in `source/`
+4. The supplied logo reference `source/playlog-logo-reference.jpeg`
+5. The original concept board in `source/`
 
-Do not estimate a color from a screenshot, crop a logo from the original JPG, or invent a new logo variation. If the available sources do not cover a use case, record the gap and ask for a brand decision.
+The supplied logo reference defines the mark geometry: the nested `P` and bookmark, the two bookmark points, and the controller buttons arranged as a cross. Do not estimate a color from a screenshot, crop a logo from a raster source, or invent a new logo variation. If the available sources do not cover a use case, record the gap and ask for a brand decision.
 
 ## Contents
 

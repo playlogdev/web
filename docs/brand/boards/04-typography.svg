@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Playlog Typography</title><desc id="desc">Sora type family weights and product type scale.</desc>
+  <defs><style>.font{font-family:Sora,"Segoe UI",sans-serif}.muted{fill:#97A1AC}.green{fill:#22C55E}</style></defs><rect width="1600" height="1000" fill="#0F1115"/>
+  <g class="font"><text x="70" y="80" class="green" font-size="18" font-weight="700" letter-spacing="4">TYPOGRAPHY</text>
+    <text x="70" y="285" fill="#F5F6F7" font-size="230" font-weight="800" letter-spacing="-12">Aa</text><text x="420" y="185" class="green" font-size="56" font-weight="750">Sora</text><text x="420" y="235" fill="#F5F6F7" font-size="22">Modern, focused, and highly readable.</text><text x="420" y="272" class="muted" font-size="19">Primary family for product interfaces and branding.</text>
+    <g transform="translate(70 365)"><text fill="#F5F6F7" font-size="28" font-weight="800">ExtraBold 800</text><text y="56" fill="#F5F6F7" font-size="28" font-weight="700">Bold 700</text><text y="112" fill="#F5F6F7" font-size="28" font-weight="600">Semibold 600</text><text y="168" fill="#F5F6F7" font-size="28" font-weight="500">Medium 500</text><text y="224" fill="#F5F6F7" font-size="28" font-weight="400">Regular 400</text></g>
+    <g transform="translate(420 350)"><text class="muted" font-size="27" letter-spacing="6">ABCDEFGHIJKLMNOPQRSTUVWXYZ</text><text y="56" class="muted" font-size="27" letter-spacing="5">abcdefghijklmnopqrstuvwxyz</text><text y="112" class="muted" font-size="27" letter-spacing="7">0123456789</text></g>
+    <line x1="70" y1="660" x2="1530" y2="660" stroke="#2A323B" stroke-width="2"/>
+    <text x="70" y="715" class="green" font-size="18" font-weight="700" letter-spacing="4">PRODUCT SCALE</text>
+    <g transform="translate(70 760)"><text fill="#F5F6F7" font-size="52" font-weight="700" letter-spacing="-1">Display large</text><text y="55" class="muted" font-size="16">3.25rem / 1.08 / 700</text></g>
+    <g transform="translate(520 770)"><text fill="#F5F6F7" font-size="32" font-weight="600">Headline</text><text y="42" class="muted" font-size="16">1.25rem / 1.4 / 600</text></g>
+    <g transform="translate(830 776)"><text fill="#F5F6F7" font-size="27" font-weight="600">Title</text><text y="38" class="muted" font-size="16">1.0625rem / 1.45 / 600</text></g>
+    <g transform="translate(1080 782)"><text fill="#F5F6F7" font-size="22" font-weight="500">Label</text><text y="34" class="muted" font-size="16">0.875rem / 1.5 / 500</text></g>
+    <g transform="translate(1320 786)"><text fill="#F5F6F7" font-size="19">Metadata</text><text y="30" class="muted" font-size="16">0.8125rem / 1.5</text></g>
+    <text x="70" y="930" class="muted" font-size="17">Use fewer weights, clear hierarchy, and comfortable line lengths. Never shrink metadata until it becomes decorative.</text>
+  </g>
+</svg>

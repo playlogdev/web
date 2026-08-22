@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "family": {
+    "primary": "Sora",
+    "fallback": ["ui-sans-serif", "system-ui", "Segoe UI", "sans-serif"]
+  },
+  "weights": {
+    "regular": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700,
+    "extraBold": 800
+  },
+  "scale": {
+    "displaySmall": { "size": "2rem", "lineHeight": 1.15, "weight": 700 },
+    "displayLarge": { "size": "3.25rem", "lineHeight": 1.08, "weight": 700 },
+    "headline": { "size": "1.25rem", "lineHeight": 1.4, "weight": 600 },
+    "title": { "size": "1.0625rem", "lineHeight": 1.45, "weight": 600 },
+    "label": { "size": "0.875rem", "lineHeight": 1.5, "weight": 500 },
+    "meta": { "size": "0.8125rem", "lineHeight": 1.5, "weight": 400 }
+  }
+}

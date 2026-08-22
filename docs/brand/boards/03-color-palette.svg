@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Playlog Color Palette</title><desc id="desc">Playlog brand and semantic color tokens with usage guidance.</desc>
+  <defs><linearGradient id="brand-gradient" x1="0" x2="1"><stop stop-color="#22C55E"/><stop offset=".34" stop-color="#06B6D4"/><stop offset=".67" stop-color="#3B82F6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient><style>.font{font-family:Sora,"Segoe UI",sans-serif}.title{fill:#0F1115;font-size:54px;font-weight:750;letter-spacing:-2px}.label{fill:#0F1115;font-size:18px;font-weight:700}.meta{fill:#5B6570;font-size:15px}.darkmeta{fill:#97A1AC;font-size:15px}</style></defs>
+  <rect width="1600" height="1000" fill="#F5F6F7"/><g class="font">
+    <text x="70" y="90" class="title">Color palette</text><text x="70" y="126" class="meta">Exact tokens — never sample values from screenshots.</text>
+    <g transform="translate(70 175)">
+      <g><rect width="190" height="190" rx="22" fill="#0F1115"/><text y="226" class="label">DEEP BLACK</text><text y="254" class="meta">#0F1115 · background</text></g>
+      <g transform="translate(215)"><rect width="190" height="190" rx="22" fill="#1A1F24"/><text y="226" class="label">CHARCOAL</text><text y="254" class="meta">#1A1F24 · surface</text></g>
+      <g transform="translate(430)"><rect width="190" height="190" rx="22" fill="#222932"/><text y="226" class="label">ELEVATED</text><text y="254" class="meta">#222932 · raised surface</text></g>
+      <g transform="translate(645)"><rect width="190" height="190" rx="22" fill="#22C55E"/><text y="226" class="label">PLAY GREEN</text><text y="254" class="meta">#22C55E · primary</text></g>
+      <g transform="translate(860)"><rect width="190" height="190" rx="22" fill="#06B6D4"/><text y="226" class="label">TEAL</text><text y="254" class="meta">#06B6D4 · focus</text></g>
+      <g transform="translate(1075)"><rect width="190" height="190" rx="22" fill="#3B82F6"/><text y="226" class="label">ELECTRIC BLUE</text><text y="254" class="meta">#3B82F6 · info</text></g>
+      <g transform="translate(1290)"><rect width="190" height="190" rx="22" fill="#8B5CF6"/><text y="226" class="label">VIOLET</text><text y="254" class="meta">#8B5CF6 · accent</text></g>
+    </g>
+    <text x="70" y="500" class="label">MARKETING GRADIENT</text><rect x="70" y="530" width="1460" height="55" rx="20" fill="url(#brand-gradient)"/><text x="70" y="620" class="meta">Use rarely for marketing emphasis. Never use as the default treatment for every action.</text>
+    <rect x="70" y="675" width="1460" height="245" rx="30" fill="#0F1115"/>
+    <text x="105" y="725" fill="#F5F6F7" font-size="23" font-weight="700">Semantic roles</text>
+    <g transform="translate(105 765)"><circle cx="16" cy="16" r="16" fill="#22C55E"/><text x="46" y="22" fill="#F5F6F7" font-size="18">Success</text><text x="46" y="48" class="darkmeta">#22C55E</text></g>
+    <g transform="translate(345 765)"><circle cx="16" cy="16" r="16" fill="#EAB308"/><text x="46" y="22" fill="#F5F6F7" font-size="18">Warning</text><text x="46" y="48" class="darkmeta">#EAB308</text></g>
+    <g transform="translate(585 765)"><circle cx="16" cy="16" r="16" fill="#EF4444"/><text x="46" y="22" fill="#F5F6F7" font-size="18">Danger</text><text x="46" y="48" class="darkmeta">#EF4444</text></g>
+    <g transform="translate(825 765)"><circle cx="16" cy="16" r="16" fill="#3B82F6"/><text x="46" y="22" fill="#F5F6F7" font-size="18">Information</text><text x="46" y="48" class="darkmeta">#3B82F6</text></g>
+    <g transform="translate(1090 765)"><circle cx="16" cy="16" r="16" fill="#06B6D4"/><text x="46" y="22" fill="#F5F6F7" font-size="18">Keyboard focus</text><text x="46" y="48" class="darkmeta">Distinct from brand green</text></g>
+    <text x="105" y="885" class="darkmeta">Primary text #F5F6F7 · Muted text #97A1AC · Edge #2A323B · Strong edge #3A444F</text>
+  </g>
+</svg>

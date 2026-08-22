@@ -11,7 +11,10 @@ The developer is learning modern Next.js and React architecture. Explain the why
 - Treat ../api as read-only. Never edit, stage, commit, push, or create files there.
 - Inspect API handlers, request and response structs, README, and migrations when the real contract is needed. Never invent endpoints or response fields.
 - Record missing backend capabilities in docs/api-gaps.md instead of changing the API repository.
-- The visual reference is docs/brand/playlog_brand_design.jpg. It is direction, not a pixel-perfect specification.
+- The structured visual source of truth is docs/brand/README.md. Read its guidelines,
+  machine-readable tokens, approved logos, and topic boards before visual work. The original
+  concept JPG is archival reference only, and docs/screenshots contains verification evidence,
+  not brand rules.
 - CLAUDE.md is the single source of project rules. AGENTS.md must remain a symlink whose target is exactly CLAUDE.md. Edit CLAUDE.md, never replace the symlink with copied content.
 
 ## Current stack
@@ -59,7 +62,9 @@ Do not create speculative layers, generic component factories, or a global state
 - Build reusable tokens and primitives instead of scattering raw values.
 - Interactive controls need applicable hover, focus-visible, active, disabled, loading, error, and empty states.
 - Target WCAG AA contrast, keyboard operation, visible focus, semantic HTML, reduced-motion support, and responsive layouts from small mobile screens upward.
-- Do not crop the JPG brand board into production logos. Use proper SVG assets when the logo system is implemented.
+- Use the approved SVG assets in docs/brand/logos. Never crop the original JPG, redraw the
+  mark, or generate a substitute logo. If an asset does not cover the placement, record the
+  gap and ask for a brand decision.
 
 ## Product milestones
 

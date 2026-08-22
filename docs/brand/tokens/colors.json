@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "brand": {
+    "background": "#0F1115",
+    "surface": "#1A1F24",
+    "elevated": "#222932",
+    "edge": "#2A323B",
+    "edgeStrong": "#3A444F",
+    "text": "#F5F6F7",
+    "textMuted": "#97A1AC",
+    "textOnBrand": "#0F1115",
+    "green": "#22C55E",
+    "greenHover": "#1EB356",
+    "teal": "#06B6D4",
+    "blue": "#3B82F6",
+    "violet": "#8B5CF6"
+  },
+  "semantic": {
+    "success": "#22C55E",
+    "warning": "#EAB308",
+    "danger": "#EF4444",
+    "info": "#3B82F6",
+    "focus": "#06B6D4"
+  },
+  "marketingGradient": {
+    "angle": "90deg",
+    "stops": ["#22C55E", "#06B6D4", "#3B82F6", "#8B5CF6"]
+  }
+}

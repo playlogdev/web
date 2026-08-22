@@ -1,69 +1,114 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Logo } from "@/components/logo";
+import {
+  BookmarkIcon,
+  LibraryIcon,
+  StarIcon,
+} from "@/components/icons";
+import { buttonClasses } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "Playlog — Track. Rate. Remember.",
+};
+
+const features = [
+  {
+    icon: BookmarkIcon,
+    title: "Track what you play",
+    description:
+      "Log every game you finish, quit, or queue up — a quiet record of your playing life.",
+  },
+  {
+    icon: StarIcon,
+    title: "Rate and remember",
+    description:
+      "Score games out of five and keep short notes, so the experiences don't blur together.",
+  },
+  {
+    icon: LibraryIcon,
+    title: "Discover and organize",
+    description:
+      "Search games, build your library, and follow friends to see what they're playing.",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-25"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/6 px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/8">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="flex min-h-dvh flex-col">
+      <header className="sticky top-0 z-10 border-b border-edge bg-background/90 backdrop-blur">
+        <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-4 sm:px-6">
+          <Logo />
+          <nav aria-label="Account" className="flex items-center gap-2">
+            <Link href="/login" className={buttonClasses("ghost", "md")}>
+              Log in
+            </Link>
+            <Link href="/signup" className={buttonClasses("primary", "md")}>
+              Sign up
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      <main className="flex-1">
+        <section className="mx-auto flex w-full max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6 sm:py-28">
+          <p className="text-label text-fg-muted">A personal game journal</p>
+          {/* The multicolor gradient appears here and nowhere else: one
+             sparing marketing accent, per the brand rules. */}
+          <h1 className="mt-4 text-display-sm bg-gradient-to-r from-brand via-accent-teal to-accent-blue bg-clip-text text-transparent md:text-display-lg">
+            Track. Rate. Remember.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+          <p className="mt-6 max-w-xl text-base text-fg-muted sm:text-lg">
+            Playlog is a quiet journal for the games you play. Keep a record of
+            every run, rate what mattered, and look back on the stories worth
+            remembering.
+          </p>
+          <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Link
+              href="/signup"
+              className={buttonClasses("primary", "lg")}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              Create your journal
+            </Link>
+            <Link href="/login" className={buttonClasses("secondary", "lg")}>
+              Log in
+            </Link>
+          </div>
+          <p className="mt-4 text-meta text-fg-muted">
+            Accounts open with milestone 3 — these routes are on the way.
+          </p>
+        </section>
+
+        <section
+          aria-labelledby="features-heading"
+          className="mx-auto w-full max-w-5xl px-4 pb-24 sm:px-6"
+        >
+          <h2 id="features-heading" className="sr-only">
+            What Playlog does
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {features.map(({ icon: Icon, title, description }) => (
+              <Card key={title} className="flex flex-col gap-3">
+                <span className="inline-flex size-10 items-center justify-center rounded-lg bg-brand/10 text-brand">
+                  <Icon />
+                </span>
+                <h3 className="text-title text-fg">{title}</h3>
+                <p className="text-label text-fg-muted">{description}</p>
+              </Card>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-edge">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <Logo size="sm" href="/" />
+          <p className="text-meta text-fg-muted">
+            Playlog is in development. © {new Date().getFullYear()} Playlog.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-39.5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-3.5 w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/8 px-5 transition-colors hover:border-transparent hover:bg-black/4 dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-39.5"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </footer>
     </div>
   );
 }

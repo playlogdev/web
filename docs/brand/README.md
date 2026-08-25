@@ -38,3 +38,4 @@ The mobile board is a cross-platform concept reference only. This repository doe
 - Preserve clear space equal to at least one controller-dot diameter around the mark.
 - Do not recolor individual logo parts, stretch the artwork, add shadows, or place it on a low-contrast background.
 - The wordmark uses Sora Bold. Product UI should compose the SVG mark with real Sora text when font consistency across SVG renderers matters.
+- `public/brand/playlog-mark.svg` is a runtime copy served to the web app. It must remain byte-for-byte identical to `logos/playlog-mark.svg`; `docs/brand` stays the source of truth, and the no-redraw rule applies to the runtime copy as well.

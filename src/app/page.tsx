@@ -76,7 +76,7 @@ export default function LandingPage() {
             </Link>
           </div>
           <p className="mt-4 text-meta text-fg-muted">
-            Accounts open with milestone 3 — these routes are on the way.
+            Free while Playlog is in development.
           </p>
         </section>
 

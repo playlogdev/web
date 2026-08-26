@@ -55,3 +55,7 @@ What the web app can do today: after opening the authorization URL in a popup or
 
 - **No CORS and no cookies on the API.** By design; this is why the BFF exists.
 - **Opaque bearer tokens instead of JWTs.** Requires one BFF round-trip per request; acceptable.
+
+## Rate limiting behind the BFF (deployment consequence)
+
+12. **The API rate limiter keys on `RemoteAddr`.** All traffic from a Next.js BFF deployment arrives from the BFF server's address, so every user shares one rate-limit bucket per protected endpoint (login 10/min, register 5/min, etc.). The web deliberately does not spoof `X-Forwarded-For` to work around this. Consequences: a single abusive user can lock out everyone behind the BFF, and limits may need raising (or a shared-store limiter keyed on real client IPs) in `playlogdev/api` before production traffic.

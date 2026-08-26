@@ -23,7 +23,7 @@ If a web feature needs something this API does not provide, record it in [`api-g
   "name": "Hollow Knight",
   "slug": "hollow-knight",
   "summary": "…",
-  "cover_url": "https://images.igdb.net/…/t_cover_big/….jpg",
+  "cover_url": "https://images.igdb.com/igdb/image/upload/t_cover_big/….jpg",
   "first_release_date": "2017-02-24",
   "genres": ["Platformer", "Metroidvania"],
   "developers": ["Team Cherry"],
@@ -109,7 +109,7 @@ Token model (source: `internal/auth/token.go`, `internal/httpapi/auth.go`):
 
 | Method & path | Auth | Query/body | Success | Notes |
 |---|---|---|---|---|
-| `GET /games/search` | required | `?q=<query>` | `200 {games: [Game]}` | Query is whitespace-normalized; must be **2–100 chars** else `400`. Fixed result size of **10** (not configurable). `503 {"error":"game search is unavailable"}` if IGDB is down/unconfigured. |
+| `GET /games/search` | required | `?q=<query>` | `200 {games: [Game]}` | Query is whitespace-normalized; the normalized query must be **2–100 UTF-8 bytes** (the Go handler measures with `len()`, which counts bytes) else `400`. Fixed result size of **10** (not configurable). `503 {"error":"game search is unavailable"}` if IGDB is down/unconfigured. |
 | `GET /games/{igdb_id}` | optionalAuth | – path id must be a positive integer | `200 {game: Game, stats, friends_activity}` | Public game page data. `400 invalid game id`; `404 {"error":"game not found"}`; `503` if IGDB unavailable. |
 
 `stats` (`gameStatsResponse`): `{backlog, playing, completed, dropped, total_logged, rating_count, average_rating}` — community counts across all users' library entries for that game; `average_rating` is `null` until someone has rated it.

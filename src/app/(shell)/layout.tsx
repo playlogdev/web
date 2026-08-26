@@ -1,16 +1,27 @@
+import { headers } from "next/headers";
 import { AppSidebar } from "@/components/app-sidebar";
 import { BottomNav } from "@/components/bottom-nav";
 import { MobileHeader } from "@/components/mobile-header";
+import { SessionRefresher } from "@/components/session-refresher";
+import { requireSession } from "@/lib/auth/session";
+import { safeInternalPath } from "@/lib/validation";
 
 /**
  * Application shell: fixed sidebar on desktop, sticky header + bottom nav on
  * mobile. The skip link is the first focusable element on every app page.
+ *
+ * Every render performs authoritative session verification (requireSession);
+ * proxy.ts only did the optimistic cookie-presence gate.
  */
-export default function ShellLayout({
+export default async function ShellLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headerList = await headers();
+  const nextPath = safeInternalPath(headerList.get("x-playlog-next"), "/home");
+  await requireSession(nextPath);
+
   return (
     <div className="min-h-dvh">
       <a
@@ -30,6 +41,7 @@ export default function ShellLayout({
         </main>
       </div>
       <BottomNav />
+      <SessionRefresher />
     </div>
   );
 }

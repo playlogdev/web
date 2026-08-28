@@ -62,7 +62,12 @@ export function FriendsActivity({
           {activity.map((entry) => (
             <li key={entry.username} className="flex items-center justify-between gap-3 px-4 py-3">
               <span className="text-label text-fg">
-                <span className="font-semibold">{entry.username}</span>{" "}
+                <Link
+                  href={`/users/${encodeURIComponent(entry.username)}`}
+                  className="font-semibold text-fg hover:text-brand"
+                >
+                  {entry.username}
+                </Link>{" "}
                 <span className="text-fg-muted">is {STATUS_TEXT[entry.status]}</span>
               </span>
               <Rating rating={entry.rating} />

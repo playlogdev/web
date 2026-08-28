@@ -1,5 +1,9 @@
 # Playlog API Contract (verified)
 
+> Milestone 6 verification: `GET /feed` always serializes `next_cursor`; its
+> value is an opaque string when another page may exist and JSON `null`
+> otherwise. Web clients pass the string through without decoding it.
+
 This document records the **verified** contract of the Playlog Go API (`playlogdev/api`, sibling repo `../api`) as of the source inspected for issue #3. Every route, field, status code, and behavior below was cross-checked against the API source (`internal/httpapi/router.go` and handler files) and its tests. Nothing here is invented.
 
 If a web feature needs something this API does not provide, record it in [`api-gaps.md`](./api-gaps.md). Never invent endpoints, request fields, or response fields.
@@ -142,12 +146,12 @@ There is **no DELETE** for library entries (see gaps).
 
 | Method & path | Auth | Query | Success | Notes |
 |---|---|---|---|---|
-| `GET /feed` | required | `?limit=<int>` (1–100, default 30; out-of-range values silently clamp/default), `?cursor=<opaque>` | `200 {events: [...], next_cursor?: string}` | Chronological, newest first. |
+| `GET /feed` | required | `?limit=<int>` (1–100, default 30; out-of-range values silently clamp/default), `?cursor=<opaque>` | `200 {events: [...], next_cursor: string \| null}` | Chronological, newest first. |
 
 - Event item: `{id, username, event_type, status?, rating?, review?, created_at, game: {igdb_id, name, cover_url}}`.
 - `event_type` values: `logged`, `status_changed`, `rated`, `reviewed`.
 - The feed contains **only events from users the caller follows** — the caller's own activity does not appear (see gaps).
-- Cursor pagination is keyset-based `(created_at, id)`; cursors are opaque base64 strings. `next_cursor` is present only when a full page was returned; omit it when loading more. Invalid cursor ⇒ `400 {"error":"invalid cursor"}`.
+- Cursor pagination is keyset-based `(created_at, id)`; cursors are opaque base64 strings. `next_cursor` is a string when a full page was returned and JSON `null` otherwise. The web app passes it through without decoding it. Invalid cursor ⇒ `400 {"error":"invalid cursor"}`.
 
 ## Steam connection and sync
 

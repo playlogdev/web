@@ -17,7 +17,7 @@ export function GameCard({ game }: { game: Game }) {
         href={`/games/${game.igdb_id}`}
         className="group flex gap-4 rounded-xl border border-edge bg-surface p-4 shadow-card transition-colors duration-150 hover:border-edge-strong focus-visible:border-edge-strong"
       >
-        <div className="w-[88px] shrink-0 self-start" style={{ aspectRatio: "132 / 187" }}>
+        <div className="w-22 shrink-0 self-start" style={{ aspectRatio: "132 / 187" }}>
           <GameCover game={game} />
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-1">

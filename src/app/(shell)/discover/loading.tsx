@@ -12,7 +12,7 @@ export default function DiscoverLoading() {
       <div className="flex flex-col gap-3">
         {[0, 1, 2].map((item) => (
           <div key={item} className="flex gap-4 rounded-xl border border-edge bg-surface p-4">
-            <Skeleton className="h-[125px] w-[88px] shrink-0 rounded-lg" />
+            <Skeleton className="h-31.25 w-22 shrink-0 rounded-lg" />
             <div className="flex flex-1 flex-col gap-3 py-2">
               <Skeleton className="h-5 w-2/3" />
               <Skeleton className="h-3 w-1/3" />

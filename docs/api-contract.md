@@ -53,7 +53,9 @@ If a web feature needs something this API does not provide, record it in [`api-g
 
 - Statuses are exactly: `backlog` | `playing` | `completed` | `dropped`. Default on create when omitted: `backlog`.
 - `rating`: number between **0.5 and 5 inclusive, in half-point increments**, or `null`.
-- `review`: string up to **10,000 characters**, or `null`.
+- `review`: string up to **10,000 UTF-8 bytes** at the HTTP handler (the
+  database constraint is 10,000 characters), or `null`. The byte limit is
+  the effective public API behavior and is therefore what clients must enforce.
 - `started_at` / `completed_at`: `YYYY-MM-DD` strings or `null`; `completed_at` must be on or after `started_at`.
 
 ### Sync job (`steamSyncJobResponse`, source: `internal/httpapi/steam.go`)

@@ -7,10 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { GameCover } from "@/components/games/game-cover";
 import { StatsGrid } from "@/components/games/stats-grid";
 import { FriendsActivity } from "@/components/games/friends-activity";
+import { LibraryEntryForm } from "@/components/library/library-entry-form";
+import { Card } from "@/components/ui/card";
 import { getAccessToken } from "@/lib/auth/cookies";
-import { getGameDetail } from "@/lib/api/server";
+import { getGameDetail, listLibrary } from "@/lib/api/server";
 import { ApiError } from "@/lib/api/errors";
 import { formatReleaseDate, validateIgdbId } from "@/lib/games";
+import type { LibraryEntry } from "@/lib/library";
 
 type DetailParams = { params: Promise<{ igdbId: string }> };
 
@@ -30,6 +33,16 @@ export default async function GameDetailPage({ params }: DetailParams) {
 
   const gamePath = `/games/${id.toString()}`;
   const accessToken = await getAccessToken();
+  const libraryEntryPromise: Promise<LibraryEntry | null | undefined> =
+    accessToken
+      ? listLibrary(accessToken)
+          .then(
+            (entries) =>
+              entries.find((entry) => BigInt(entry.game.igdb_id) === id) ??
+              null,
+          )
+          .catch(() => undefined)
+      : Promise.resolve(undefined);
 
   let detail;
   try {
@@ -48,6 +61,8 @@ export default async function GameDetailPage({ params }: DetailParams) {
 
   const { game, stats, friendsActivity } = detail;
   const releaseDate = game.first_release_date ? formatReleaseDate(game.first_release_date) : null;
+  const libraryEntry =
+    friendsActivity === null ? undefined : await libraryEntryPromise;
 
   return (
     <DetailShell
@@ -56,7 +71,7 @@ export default async function GameDetailPage({ params }: DetailParams) {
     >
       <article className="flex flex-col gap-6">
         <header className="flex flex-col gap-4 sm:flex-row">
-          <div className="w-[132px] shrink-0 self-start sm:w-[158px]" style={{ aspectRatio: "132 / 187" }}>
+          <div className="w-33 shrink-0 self-start sm:w-39.5" style={{ aspectRatio: "132 / 187" }}>
             <GameCover game={game} priority />
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -99,14 +114,50 @@ export default async function GameDetailPage({ params }: DetailParams) {
           </section>
         )}
 
+        <section aria-labelledby="journal-heading" className="flex flex-col gap-3">
+          <h2 id="journal-heading" className="text-title text-fg">
+            Your journal
+          </h2>
+          {friendsActivity === null ? (
+            <Card className="flex flex-col items-start gap-3">
+              <p className="text-label text-fg-muted">
+                Log in to add {game.name} to your library and remember your
+                experience.
+              </p>
+              <Link
+                href={`/login?next=${encodeURIComponent(gamePath)}`}
+                className={buttonClasses("primary", "sm")}
+              >
+                Log in to add
+              </Link>
+            </Card>
+          ) : libraryEntry === undefined ? (
+            <div
+              role="status"
+              className="rounded-xl border border-warning/40 bg-warning/10 px-4 py-3 text-label text-fg-muted"
+            >
+              Your library status could not be loaded right now. Try again
+              shortly.
+            </div>
+          ) : (
+            <Card>
+              <LibraryEntryForm
+                key={libraryEntry?.updated_at ?? "new-entry"}
+                gameId={game.igdb_id}
+                gameName={game.name}
+                initialEntry={libraryEntry}
+              />
+            </Card>
+          )}
+        </section>
+
         <section aria-labelledby="stats-heading" className="flex flex-col gap-3">
           <h2 id="stats-heading" className="text-title text-fg">
             Community
           </h2>
           <StatsGrid stats={stats} />
           <p className="text-meta text-fg-muted">
-            Counts come from every Playlog player&apos;s library. Library logging arrives in a
-            later update.
+            Counts come from every Playlog player&apos;s library.
           </p>
         </section>
 

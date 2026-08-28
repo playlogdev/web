@@ -1,9 +1,16 @@
 import "server-only";
 import { ApiError, GENERIC_UNAVAILABLE_MESSAGE, GENERIC_UNEXPECTED_MESSAGE } from "@/lib/api/errors";
 import { parseGame, validateSearchQuery, type Game } from "@/lib/games";
+import {
+  parseLibraryEntry,
+  type AddLibraryEntry,
+  type LibraryEntry,
+  type LibraryMutation,
+} from "@/lib/library";
 
 const DEFAULT_TIMEOUT_MS = 5000;
 const MAX_RESPONSE_BYTES = 64 * 1024;
+const MAX_LIBRARY_RESPONSE_BYTES = 4 * 1024 * 1024;
 
 function baseUrl(): string {
   const url = process.env.API_BASE_URL;
@@ -32,6 +39,7 @@ export async function apiRequest<T>(
     body?: unknown;
     authToken?: string;
     timeoutMs?: number;
+    maxResponseBytes?: number;
   } = {},
 ): Promise<ApiResult<T>> {
   const controller = new AbortController();
@@ -69,7 +77,10 @@ export async function apiRequest<T>(
 
   const contentType = response.headers.get("Content-Type") ?? "";
   const rawBody = await response.text();
-  if (rawBody.length > MAX_RESPONSE_BYTES) {
+  if (
+    new TextEncoder().encode(rawBody).byteLength >
+    (options.maxResponseBytes ?? MAX_RESPONSE_BYTES)
+  ) {
     throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
   }
 
@@ -90,6 +101,15 @@ export async function apiRequest<T>(
       typeof parsed === "object" && parsed !== null && typeof (parsed as { error?: unknown }).error === "string"
         ? (parsed as { error: string }).error
         : null;
+
+    if (response.status === 503) {
+      throw new ApiError(
+        503,
+        GENERIC_UNAVAILABLE_MESSAGE,
+        "unavailable",
+        retryAfter,
+      );
+    }
 
     if (response.status >= 500) {
       throw new ApiError(response.status, GENERIC_UNEXPECTED_MESSAGE, "unexpected", retryAfter);
@@ -389,4 +409,70 @@ function parseDetail(result: { body: unknown }): GameDetail {
   }
 
   return { game, stats, friendsActivity: friends };
+}
+
+// ---------------------------------------------------------------------------
+// Personal library (milestone 5)
+// ---------------------------------------------------------------------------
+
+/**
+ * The API currently returns the complete library without pagination. A
+ * dedicated bounded response allowance avoids rejecting ordinary journals
+ * with reviews while still preventing an unbounded upstream payload.
+ */
+export async function listLibrary(authToken: string): Promise<LibraryEntry[]> {
+  const { body } = await apiRequest<unknown>("GET", "/library", {
+    authToken,
+    maxResponseBytes: MAX_LIBRARY_RESPONSE_BYTES,
+  });
+
+  if (
+    typeof body !== "object" ||
+    body === null ||
+    !Array.isArray((body as { library?: unknown }).library)
+  ) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+
+  const entries: LibraryEntry[] = [];
+  for (const value of (body as { library: unknown[] }).library) {
+    const entry = parseLibraryEntry(value);
+    if (entry === null) {
+      throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+    }
+    entries.push(entry);
+  }
+  return entries;
+}
+
+export async function addLibraryEntry(
+  authToken: string,
+  input: AddLibraryEntry,
+): Promise<LibraryEntry> {
+  const { body } = await apiRequest<unknown>("POST", "/library", {
+    authToken,
+    body: input,
+  });
+  return requireLibraryEntry(body);
+}
+
+export async function updateLibraryEntry(
+  authToken: string,
+  entryId: string,
+  input: LibraryMutation,
+): Promise<LibraryEntry> {
+  const { body } = await apiRequest<unknown>(
+    "PATCH",
+    `/library/${encodeURIComponent(entryId)}`,
+    { authToken, body: input },
+  );
+  return requireLibraryEntry(body);
+}
+
+function requireLibraryEntry(body: unknown): LibraryEntry {
+  const entry = parseLibraryEntry(body);
+  if (entry === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return entry;
 }

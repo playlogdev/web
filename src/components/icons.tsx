@@ -63,6 +63,18 @@ export function UserIcon(props: IconProps) {
   );
 }
 
+export function ConnectionIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <circle cx="7" cy="12" r="3" />
+      <circle cx="17" cy="7" r="3" />
+      <path d="m9.7 10.7 4.6-2.3" />
+      <path d="m9.8 13.2 4.4 2.3" />
+      <circle cx="17" cy="17" r="3" />
+    </svg>
+  );
+}
+
 export function SearchIcon(props: IconProps) {
   return (
     <svg {...base(props)}>

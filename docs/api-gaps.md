@@ -17,7 +17,9 @@ Consequences for the web experience:
 2. The Next.js BFF never learns the outcome of the handshake — there is no `return_to` / relay-state parameter the web app could use to receive the result, and the API offers none.
 3. Error cases (`invalid or expired connection state`, `steam authentication failed`, `steam account is already connected to another user`) are equally raw JSON, with no path back to a friendly error screen.
 
-What the web app can do today: after opening the authorization URL in a popup or same-tab navigation, poll `GET /connections/steam` until `connected` flips to `true`. That is a workaround with real UX cost (polling latency, no error reason surfaced, broken if the tab navigated away), not a fix. A proper resolution requires an API change — e.g. letting the callback redirect back to a web-app URL with the outcome — and belongs in `playlogdev/api`.
+Milestone 7 implements the available workaround deliberately: the web app opens the validated Steam authorization URL in a popup and polls `GET /connections/steam` until `connected` flips to `true`. Once connected, it calls `POST /connections/steam/sync`; because the API returns the existing queued/running job instead of duplicating one, this recovers the callback-created job id and lets the UI poll progress. The flow is bounded, handles blocked/closed popups, and keeps all bearer tokens inside the BFF.
+
+This remains a workaround with real UX cost: polling adds latency, callback failures cannot be surfaced to the parent page, and the popup briefly displays raw JSON. A proper resolution still requires an API change — for example, allowing the callback to redirect to a validated web-app URL with the outcome — and belongs in `playlogdev/api`.
 
 ## Email verification and password-reset landing pages
 

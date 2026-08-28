@@ -56,7 +56,7 @@ export default function LandingPage() {
           <p className="text-label text-fg-muted">A personal game journal</p>
           {/* The multicolor gradient appears here and nowhere else: one
              sparing marketing accent, per the brand rules. */}
-          <h1 className="mt-4 text-display-sm bg-gradient-to-r from-brand via-accent-teal to-accent-blue bg-clip-text text-transparent md:text-display-lg">
+          <h1 className="mt-4 text-display-sm bg-linear-to-r from-brand via-accent-teal to-accent-blue bg-clip-text text-transparent md:text-display-lg">
             Track. Rate. Remember.
           </h1>
           <p className="mt-6 max-w-xl text-base text-fg-muted sm:text-lg">

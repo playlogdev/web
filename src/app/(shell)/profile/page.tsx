@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { buttonClasses } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ConnectionIcon } from "@/components/icons";
 import { FormStatus } from "@/components/auth/form-status";
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
 import { LogoutButtons } from "@/components/auth/logout-buttons";
@@ -72,6 +75,23 @@ export default async function ProfilePage() {
           </p>
         </div>
         <ProfileLookupForm compact />
+      </Card>
+
+      <Card className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-3">
+          <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand">
+            <ConnectionIcon />
+          </span>
+          <div>
+            <h2 className="text-title text-fg">Connected libraries</h2>
+            <p className="mt-1 text-meta text-fg-muted">
+              Connect Steam and synchronize a read-only snapshot of games you own.
+            </p>
+          </div>
+        </div>
+        <Link href="/connections/steam" className={buttonClasses("secondary", "sm")}>
+          Manage Steam
+        </Link>
       </Card>
 
       <Card className="flex flex-col gap-3">

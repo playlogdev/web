@@ -16,11 +16,22 @@ import {
   type FeedPage,
   type ProfileResult,
 } from "@/lib/social";
+import {
+  isSteamSyncJobId,
+  parseSteamAuthorizationURL,
+  parseSteamConnection,
+  parseSteamLibraryPage,
+  parseSteamSyncJob,
+  type SteamConnection,
+  type SteamLibraryPage,
+  type SteamSyncJob,
+} from "@/lib/steam";
 
 const DEFAULT_TIMEOUT_MS = 5000;
 const MAX_RESPONSE_BYTES = 64 * 1024;
 const MAX_LIBRARY_RESPONSE_BYTES = 4 * 1024 * 1024;
 const MAX_FEED_RESPONSE_BYTES = 512 * 1024;
+const MAX_STEAM_LIBRARY_RESPONSE_BYTES = 2 * 1024 * 1024;
 
 function baseUrl(): string {
   const url = process.env.API_BASE_URL;
@@ -604,4 +615,101 @@ async function getUsernameList(
     throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
   }
   return list;
+}
+
+// ---------------------------------------------------------------------------
+// Steam connection and owned-library synchronization (milestone 7)
+// ---------------------------------------------------------------------------
+
+export async function startSteamConnection(authToken: string): Promise<string> {
+  const { body } = await apiRequest<unknown>(
+    "POST",
+    "/connections/steam/start",
+    { authToken },
+  );
+  if (typeof body !== "object" || body === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+
+  const authorizationURL = parseSteamAuthorizationURL(
+    (body as Record<string, unknown>).authorization_url,
+    baseUrl(),
+  );
+  if (authorizationURL === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return authorizationURL;
+}
+
+export async function getSteamConnection(authToken: string): Promise<SteamConnection> {
+  const { body } = await apiRequest<unknown>("GET", "/connections/steam", {
+    authToken,
+  });
+  const connection = parseSteamConnection(body);
+  if (connection === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return connection;
+}
+
+export function disconnectSteam(authToken: string) {
+  return apiRequest<undefined>("DELETE", "/connections/steam", { authToken });
+}
+
+export async function queueSteamSync(authToken: string): Promise<SteamSyncJob> {
+  const { body } = await apiRequest<unknown>("POST", "/connections/steam/sync", {
+    authToken,
+  });
+  return requireSteamSyncJob(body);
+}
+
+export async function getSteamSyncJob(
+  authToken: string,
+  jobId: string,
+): Promise<SteamSyncJob> {
+  if (!isSteamSyncJobId(jobId)) {
+    throw new ApiError(404, "sync job not found", "expected");
+  }
+  const { body } = await apiRequest<unknown>(
+    "GET",
+    `/connections/steam/sync/${encodeURIComponent(jobId)}`,
+    { authToken },
+  );
+  return requireSteamSyncJob(body);
+}
+
+export async function getSteamLibrary(
+  authToken: string,
+  limit: number,
+  offset: number,
+): Promise<SteamLibraryPage> {
+  if (
+    !Number.isSafeInteger(limit) ||
+    limit < 1 ||
+    limit > 200 ||
+    !Number.isSafeInteger(offset) ||
+    offset < 0
+  ) {
+    throw new ApiError(400, "invalid Steam library page", "expected");
+  }
+
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  const { body } = await apiRequest<unknown>(
+    "GET",
+    `/connections/steam/library?${params.toString()}`,
+    { authToken, maxResponseBytes: MAX_STEAM_LIBRARY_RESPONSE_BYTES },
+  );
+  const page = parseSteamLibraryPage(body);
+  if (page === null || page.limit !== limit || page.offset !== offset) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return page;
+}
+
+function requireSteamSyncJob(body: unknown): SteamSyncJob {
+  const job = parseSteamSyncJob(body);
+  if (job === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return job;
 }

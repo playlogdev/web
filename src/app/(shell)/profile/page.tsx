@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { FormStatus } from "@/components/auth/form-status";
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
 import { LogoutButtons } from "@/components/auth/logout-buttons";
+import { ProfileLookupForm } from "@/components/social/profile-lookup-form";
 import { getAccessToken } from "@/lib/auth/cookies";
 import { requireSession } from "@/lib/auth/session";
 import { listSessions, type SessionSummary } from "@/lib/api/server";
@@ -59,8 +60,18 @@ export default async function ProfilePage() {
         </div>
         <p className="text-label text-fg-muted">{session.email}</p>
         <p className="text-meta text-fg-muted">
-          Usernames and profile editing arrive with the profile milestone.
+          The current account response does not include your username, so Playlog cannot link your own public journal automatically yet.
         </p>
+      </Card>
+
+      <Card className="flex flex-col gap-3">
+        <div>
+          <h2 className="text-title text-fg">Public journal</h2>
+          <p className="text-meta text-fg-muted">
+            Open any public profile with its exact username. Profile editing and user search are not available in the API yet.
+          </p>
+        </div>
+        <ProfileLookupForm compact />
       </Card>
 
       <Card className="flex flex-col gap-3">

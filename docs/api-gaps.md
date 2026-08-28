@@ -38,6 +38,15 @@ What the web app can do today: after opening the authorization URL in a popup or
 
 ## Profile and social limitations
 
+- **The authenticated account response does not include the username.**
+  `GET /auth/me` returns only `{id, email, verified}`. The web app cannot
+  automatically construct a "my public profile" link after login without a
+  separate trusted username or an API change.
+- **There is no user search or discovery endpoint.** A profile can only be
+  opened when the visitor already knows the exact lowercase username. The web
+  UI therefore provides exact-username navigation and does not offer search
+  suggestions.
+
 6. **No profile editing capability at all.** The data model has no display name, bio, avatar, or any mutable profile fields; registration fixes `username` forever. Any "settings → profile" screen has nothing to bind to.
 7. **Follower/following lists are usernames only**, newest first, unpaginated: no ids, avatars (which don't exist anyway), or display names, and no way to page long lists.
 8. **No individual session revocation.** `GET /auth/sessions` lists sessions with ids and flags `current`, but there is no "revoke this session" endpoint — only logout-current (`POST /auth/logout`) and logout-all (`POST /auth/logout/all`). A settings page can show devices but cannot act on one.

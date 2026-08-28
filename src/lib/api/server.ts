@@ -7,10 +7,20 @@ import {
   type LibraryEntry,
   type LibraryMutation,
 } from "@/lib/library";
+import {
+  isSafeFeedCursor,
+  isUsername,
+  parseFeedPage,
+  parsePublicProfile,
+  parseUsernameList,
+  type FeedPage,
+  type ProfileResult,
+} from "@/lib/social";
 
 const DEFAULT_TIMEOUT_MS = 5000;
 const MAX_RESPONSE_BYTES = 64 * 1024;
 const MAX_LIBRARY_RESPONSE_BYTES = 4 * 1024 * 1024;
+const MAX_FEED_RESPONSE_BYTES = 512 * 1024;
 
 function baseUrl(): string {
   const url = process.env.API_BASE_URL;
@@ -475,4 +485,123 @@ function requireLibraryEntry(body: unknown): LibraryEntry {
     throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
   }
   return entry;
+}
+
+// ---------------------------------------------------------------------------
+// Profiles, follow relationships, and feed (milestone 6)
+// ---------------------------------------------------------------------------
+
+/** A stale token gets one anonymous retry because profiles are public. */
+export async function getPublicProfile(
+  username: string,
+  authToken: string | undefined,
+): Promise<ProfileResult> {
+  if (!isUsername(username)) {
+    throw new ApiError(404, "user not found", "expected");
+  }
+
+  const path = `/users/${encodeURIComponent(username)}`;
+  if (authToken) {
+    try {
+      const { body } = await apiRequest<unknown>("GET", path, {
+        authToken,
+        maxResponseBytes: MAX_LIBRARY_RESPONSE_BYTES,
+      });
+      return { profile: requirePublicProfile(body), viewer: "authenticated" };
+    } catch (error) {
+      if (!(error instanceof ApiError) || error.status !== 401) {
+        throw error;
+      }
+    }
+  }
+
+  const { body } = await apiRequest<unknown>("GET", path, {
+    maxResponseBytes: MAX_LIBRARY_RESPONSE_BYTES,
+  });
+  return { profile: requirePublicProfile(body), viewer: "anonymous" };
+}
+
+export async function getFollowers(username: string): Promise<string[]> {
+  return getUsernameList(username, "followers");
+}
+
+export async function getFollowing(username: string): Promise<string[]> {
+  return getUsernameList(username, "following");
+}
+
+export function followUser(authToken: string, username: string) {
+  if (!isUsername(username)) {
+    throw new ApiError(404, "user not found", "expected");
+  }
+  return apiRequest<undefined>(
+    "POST",
+    `/users/${encodeURIComponent(username)}/follow`,
+    { authToken },
+  );
+}
+
+export function unfollowUser(authToken: string, username: string) {
+  if (!isUsername(username)) {
+    throw new ApiError(404, "user not found", "expected");
+  }
+  return apiRequest<undefined>(
+    "DELETE",
+    `/users/${encodeURIComponent(username)}/follow`,
+    { authToken },
+  );
+}
+
+export async function getFeed(
+  authToken: string,
+  cursor?: string,
+  limit = 12,
+): Promise<FeedPage> {
+  if (cursor !== undefined && !isSafeFeedCursor(cursor)) {
+    throw new ApiError(400, "invalid cursor", "expected");
+  }
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) {
+    throw new ApiError(400, "invalid feed limit", "expected");
+  }
+
+  const params = new URLSearchParams({ limit: String(limit) });
+  if (cursor) {
+    params.set("cursor", cursor);
+  }
+  const { body } = await apiRequest<unknown>(
+    "GET",
+    `/feed?${params.toString()}`,
+    { authToken, maxResponseBytes: MAX_FEED_RESPONSE_BYTES },
+  );
+  const page = parseFeedPage(body);
+  if (page === null || page.events.length > limit) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return page;
+}
+
+function requirePublicProfile(body: unknown) {
+  const profile = parsePublicProfile(body);
+  if (profile === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return profile;
+}
+
+async function getUsernameList(
+  username: string,
+  key: "followers" | "following",
+): Promise<string[]> {
+  if (!isUsername(username)) {
+    throw new ApiError(404, "user not found", "expected");
+  }
+  const { body } = await apiRequest<unknown>(
+    "GET",
+    `/users/${encodeURIComponent(username)}/${key}`,
+    { maxResponseBytes: MAX_FEED_RESPONSE_BYTES },
+  );
+  const list = parseUsernameList(body, key);
+  if (list === null) {
+    throw new ApiError(502, GENERIC_UNEXPECTED_MESSAGE, "unexpected");
+  }
+  return list;
 }

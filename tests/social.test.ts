@@ -82,6 +82,26 @@ describe("social contract validation", () => {
     expect(isSafeFeedCursor("x")).toBe(true);
     expect(isSafeFeedCursor("x".repeat(2049))).toBe(false);
   });
+
+  it("accepts a reviewed event with its persisted library status", () => {
+    const reviewed = {
+      ...EVENT,
+      id: "00000000-0000-4000-8000-000000000003",
+      event_type: "reviewed",
+      status: "completed",
+      rating: null,
+      review: "Worth remembering.",
+      game: { igdb_id: 1001, name: "Celeste" },
+    };
+
+    expect(parseFeedPage({ events: [reviewed], next_cursor: null })).toEqual({
+      events: [reviewed],
+      next_cursor: null,
+    });
+
+    const normalized = parseFeedPage({ events: [reviewed], next_cursor: null });
+    expect(parseFeedPage(normalized)).toEqual(normalized);
+  });
 });
 
 describe("server-only social API client", () => {

@@ -203,15 +203,15 @@ function parseFeedGame(value: unknown): FeedGame | null {
     record.igdb_id <= 0 ||
     typeof record.name !== "string" ||
     record.name.trim().length === 0 ||
-    typeof record.cover_url !== "string"
+    (record.cover_url !== undefined && typeof record.cover_url !== "string")
   ) {
     return null;
   }
 
   const game: FeedGame = { igdb_id: record.igdb_id, name: record.name };
-  if (record.cover_url !== "" && isSafeCoverUrl(record.cover_url)) {
+  if (typeof record.cover_url === "string" && record.cover_url !== "" && isSafeCoverUrl(record.cover_url)) {
     game.cover_url = record.cover_url;
-  } else if (record.cover_url !== "") {
+  } else if (record.cover_url !== undefined && record.cover_url !== "") {
     return null;
   }
   return game;

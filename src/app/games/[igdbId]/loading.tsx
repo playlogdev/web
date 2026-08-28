@@ -12,7 +12,7 @@ export default function GameDetailLoading() {
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-8" aria-busy="true" aria-live="polite">
         <p className="sr-only">Loading game details…</p>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <div className="w-[132px] shrink-0 animate-pulse rounded-lg bg-elevated sm:w-[158px]" style={{ aspectRatio: "132 / 187" }} />
+          <div className="w-33 shrink-0 animate-pulse rounded-lg bg-elevated sm:w-39.5" style={{ aspectRatio: "132 / 187" }} />
           <div className="flex flex-1 flex-col gap-3 py-1">
             <div className="h-8 w-3/4 animate-pulse rounded bg-elevated" />
             <div className="h-4 w-1/4 animate-pulse rounded bg-elevated" />

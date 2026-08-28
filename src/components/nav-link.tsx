@@ -39,7 +39,7 @@ export function NavLink({
       ].join(" ")}
     >
       {icon}
-      <span className={showLabel ? "" : "text-[0.6875rem] leading-none"}>
+      <span className={showLabel ? "" : "text-xs leading-none"}>
         {label}
       </span>
     </Link>
